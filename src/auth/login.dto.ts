@@ -1,31 +1,21 @@
+import { Expose } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export class UserRequestDTO {
-  id: number;
-
-  @IsString()
+export class LoginRequestDTO {
   @IsNotEmpty()
+  @IsString()
   @IsEmail()
   email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  name: string;
 
   @IsNotEmpty()
   @IsString()
   password: string;
 }
 
-export class UserResponseDTO {
-  id: number;
-
-  @IsString()
+export class LoginResponseDTO {
+  @Expose()
   @IsNotEmpty()
+  @IsString()
   @IsEmail()
   email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  name: string;
 }

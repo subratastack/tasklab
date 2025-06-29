@@ -8,7 +8,20 @@ datasource db {
 }
 
 model User {
-    id    Int    @id @default(autoincrement())
-    email String @unique
-    name  String
+    id       Int       @id @default(autoincrement())
+    email    String    @unique
+    name     String
+    password String
+    projects Project[]
+
+    @@map("users")
+}
+
+model Project {
+    id      Int    @id @default(autoincrement())
+    name    String
+    ownerId Int
+    owner   User   @relation(fields: [ownerId], references: [id])
+
+    @@map("projects")
 }
