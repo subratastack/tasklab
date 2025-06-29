@@ -1,8 +1,8 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { ProjectDTO } from "./project.dto";
 import { plainToInstance } from "class-transformer";
-import { Project } from "@prisma/client";
+import { Prisma, Project } from "@prisma/client";
 
 @Injectable()
 export class ProjectService {
@@ -26,6 +26,34 @@ export class ProjectService {
       }
     } catch (error) {
       throw new InternalServerErrorException((error as Error).message);
+    }
+  }
+
+  public async findById(id: number): Promise<ProjectDTO | void> {
+    try {
+      const project = await this.prisma.project.findUniqueOrThrow({
+        where: {
+          id
+        }
+      });
+
+      return plainToInstance(
+        ProjectDTO,
+        project,
+        {
+          excludeExtraneousValues: true
+        }
+      )
+    } catch(error: unknown) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new NotFoundException("Could not find project"); 
+      }
+
+      if (error as Error) {
+        throw new InternalServerErrorException((error as Error).message);
+      }
     }
   }
 }
