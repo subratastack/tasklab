@@ -18,10 +18,11 @@ model User {
 }
 
 model Project {
-    id      Int    @id @default(autoincrement())
-    name    String
-    ownerId Int
-    owner   User   @relation(fields: [ownerId], references: [id])
+    id        Int      @id @default(autoincrement())
+    name      String
+    ownerId   Int
+    owner     User     @relation(fields: [ownerId], references: [id])
+    createdOn DateTime @default(now())
 
     @@map("projects")
 }

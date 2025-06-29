@@ -17,5 +17,5 @@ export class LoginResponseDTO {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  email: string;
+  accessToken: string;
 }
